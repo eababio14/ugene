@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your Cart - Your Book Store</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; 
+    background: #f9f7ff;
+    color: #333;
+  }
+  header {
+    background: #5e35b1;
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  nav {
+    padding: 1rem;
+    background: #ede7f6;
+  }
+  nav a {
+    color: #5e35b1;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  main {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  th, td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+  }
+  input.qty-input {
+    width: 50px;
+    padding: 0.3rem;
+    text-align: center;
+    font-size: 1rem;
+  }
+  button.remove-btn {
+    background: #e53935;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button.remove-btn:hover {
+    background: #c62828;
+  }
+  button.checkout-btn {
+    background: #ffd54f;
+    border: none;
+    padding: 1rem 2rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    color: #4527a0;
+    box-shadow: 0 6px 15px rgb(255 213 79 / 0.6);
+    transition: background 0.3s ease;
+  }
+  button.checkout-btn:hover {
+    background: #ffca28;
+  }
+  .empty-msg {
+    font-style: italic;
+    text-align: center;
+    margin: 3rem 0;
+    color: #777;
+  }
+</style>
+</head>
+<body>
+
+<header>Your Cart</header>
+
+<nav>
+  <a href="index.html">← Continue Shopping</a>
+</nav>
+
+<main>
+  <table id="cartTable" aria-label="Shopping cart items">
+    <thead>
+      <tr>
+        <th>Book</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="cartBody"></tbody>
+  </table>
+
+  <div id="emptyCartMsg" class="empty-msg" style="display:none;">
+    Your cart is empty.
+  </div>
+
+  <div style="text-align:right;">
+    <strong>Total: $<span id="cartTotal">0.00</span></strong>
+  </div>
+
+  <div style="text-align:center; margin-top:2rem;">
+    <button id="checkoutBtn" class="checkout-btn" aria-label="Proceed to checkout">Checkout</button>
+  </div>
+</main>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  const stripe = Stripe('pk_test_XXXXXXXXXXXXXXXXXXXX'); // Replace with your Stripe publishable key
+  const cartBody = document.getElementById('cartBody');
+  const cartTotalEl = document.getElementById('cartTotal');
+  const emptyCartMsg = document.getElementById('emptyCartMsg');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+
+  function setCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function renderCart() {
+    const cart = getCart();
+    cartBody.innerHTML = '';
+    if (cart.length === 0) {
+      emptyCartMsg.style.display = 'block';
+      checkoutBtn.disabled = true;
+      cartTotalEl.textContent = '0.00';
+      return;
+    }
+    emptyCartMsg.style.display = 'none';
+    checkoutBtn.disabled = false;
+
+    let total = 0;
+    cart.forEach((item, index) => {
+      const subtotal = item.price * item.quantity;
+      total += subtotal;
+
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+        <td>${item.name}</td>
+        <td>$${item.price.toFixed(2)}</td>
+        <td>
+          <input aria-label="Quantity for ${item.name}" class="qty-input" type="number" min="1" value="${item.quantity}" data-index="${index}" />
+        </td>
+        <td>$${subtotal.toFixed(2)}</td>
+        <td>
+          <button class="remove-btn" data-index="${index}" aria-label="Remove ${item.name} from cart">Remove</button>
+        </td>
+      `;
+      cartBody.appendChild(tr);
+    });
+    cartTotalEl.textContent = total.toFixed(2);
+
+    // Add event listeners for qty input
+    document.querySelectorAll('.qty-input').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const idx = e.target.getAttribute('data-index');
+        let val = parseInt(e.target.value);
+        if (isNaN(val) || val < 1) val = 1;
+        const cart = getCart();
+        cart[idx].quantity = val;
+        setCart(cart);
+        renderCart();
+      });
+    });
+
+    // Add event listeners for remove buttons
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = e.target.getAttribute('data-index');
+        const cart = getCart();
+        cart.splice(idx, 1);
+        setCart(cart);
+        renderCart();
+      });
+    });
+  }
+
+  checkoutBtn.addEventListener('click', async () => {
+    const cart = getCart();
+    if (cart.length === 0) return;
+
+    // Prepare line items for Stripe checkout
+    const line_items = cart.map(item => ({
+      price: item.priceId,
+      quantity: item.quantity
+    }));
+
+    try {
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: line_items,
+        mode: 'payment',
+        successUrl: window.location.origin + '/success.html',
+        cancelUrl: window.location.origin + '/cart.html',
+      });
+      if (error) {
+        alert(error.message);
+      }
+    } catch (err) {
+      alert('Failed to initiate checkout: ' + err.message);
+    }
+  });
+
+  renderCart();
+</script>
+
+</body>
+</html>

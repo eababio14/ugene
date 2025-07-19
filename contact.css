@@ -1,0 +1,88 @@
+/* === FANCY CONTACT PAGE STYLING === */
+body {
+  background: linear-gradient(135deg, #f0f4ff, #e5ecfb);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contact-container {
+  max-width: 700px;
+  margin: 4rem auto;
+  padding: 3rem;
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.contact-container:hover {
+  transform: translateY(-3px);
+}
+
+.contact-container h1 {
+  margin-bottom: 0.5rem;
+  font-size: 2.2rem;
+  color: #222;
+  font-weight: 700;
+}
+
+.contact-container p {
+  margin-bottom: 2rem;
+  color: #555;
+  font-size: 1rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  text-align: left;
+}
+
+.contact-form label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 0.9rem 1rem;
+  border: 1px solid #ccd5e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f9fbfd;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #0077cc;
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.15);
+  outline: none;
+  background-color: #fff;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-form button {
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, #0077cc, #005fa3);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 119, 204, 0.2);
+}
+
+.contact-form button:hover {
+  background: linear-gradient(135deg, #005fa3, #004b8a);
+  transform: translateY(-1px);
+}
+

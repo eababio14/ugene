@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Book Title</title>
+  <link rel="stylesheet" href="nav.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f9f7ff;
+      color: #333;
+    }
+    header {
+      background: #5e35b1;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    nav {
+      background: #ede7f6;
+      text-align: right;
+      padding: 1rem;
+    }
+    nav a {
+      color: #5e35b1;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 1rem;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .book-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+    }
+    .book-cover img {
+      width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgb(94 53 177 / 0.3);
+    }
+    .book-details h2 {
+      color: #4527a0;
+      margin: 0 0 1rem 0;
+    }
+    .book-details h3 {
+      font-weight: 400;
+      margin-top: 0;
+      font-style: italic;
+      color: #8e72d9;
+    }
+    .buy-section, .reviews-section {
+      margin-top: 3rem;
+    }
+    .price {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .buy-btn, .add-cart {
+      background: #ffd54f;
+      border: none;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      color: #4527a0;
+      box-shadow: 0 6px 15px rgb(255 213 79 / 0.6);
+      transition: background 0.3s ease;
+      margin-right: 1rem;
+    }
+    .buy-btn:hover, .add-cart:hover {
+      background: #ffca28;
+    }
+    .review-list {
+      list-style: none;
+      padding: 0;
+    }
+    .review-list li {
+      background: white;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgb(111 66 193 / 0.1);
+    }
+    .review-list .reviewer {
+      font-weight: 700;
+      color: #6f42c1;
+    }
+    .review-list .rating {
+      color: #f4b800;
+    }
+    .review-form {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgb(111 66 193 / 0.15);
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+    .review-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #4b2c91;
+    }
+    .review-form input, .review-form textarea, .review-form select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1.2rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    @media (max-width: 700px) {
+      .book-info {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>Your Book Title</header>
+<a href="index.html" class="logo">📚 Your Book</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About the Author</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+<nav>
+  <a href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a>
+</nav>
+
+<main>
+  <section class="book-info" aria-label="Book information">
+    <div class="book-cover">
+      <img src="https://media-atl3-2.cdn.whatsapp.net/v/t61.24694-24/490584431_1860509284730820_3842305010353163570_n.jpg?ccb=11-4&oh=01_Q5Aa2AFGp_4qW5rS2RMN1qerKGxFsodGkXC6RCg5rC9WMXLBfg&oe=68891487&_nc_sid=5e03e0&_nc_cat=102" alt="Book cover" />
+    </div>
+    <div class="book-details">
+      <h2>Your Book Title</h2>
+      <h3>by Ugene Ampofo Ofori-Atta</h3>
+      <p class="book-description">
+        Dive into this thrilling book that takes you on an unforgettable journey. Discover stories that inspire, challenge, and entertain. Perfect for readers who love depth, suspense, and emotion.
+      </p>
+      <p><strong>Format:</strong> Paperback / eBook</p>
+      <p><strong>Pages:</strong> 320</p>
+      <p><strong>Publisher:</strong> Your Publisher</p>
+      <p><strong>ISBN:</strong> 123-4567890123</p>
+      <p><strong>Price:</strong> $29.99</p>
+      <button class="buy-btn" id="buyBtn">Buy Now</button>
+      <button class="add-cart" id="addToCartBtn">Add to Cart</button>
+    </div>
+  </section>
+
+  <section class="reviews-section" aria-label="Book reviews">
+    <h3>Reviews</h3>
+    <ul class="review-list" id="reviewList" aria-live="polite"></ul>
+
+    <form class="review-form" id="reviewForm" aria-label="Submit a review">
+      <label for="reviewerName">Your Name</label>
+      <input type="text" id="reviewerName" name="reviewerName" required placeholder="Your name" />
+
+      <label for="rating">Rating</label>
+      <select id="rating" name="rating" required>
+        <option value="" disabled selected>Choose a rating</option>
+        <option value="5">★★★★★ - Excellent</option>
+        <option value="4">★★★★ - Very Good</option>
+        <option value="3">★★★ - Good</option>
+        <option value="2">★★ - Fair</option>
+        <option value="1">★ - Poor</option>
+      </select>
+
+      <label for="comment">Review</label>
+      <textarea id="comment" name="comment" required placeholder="Write your review here"></textarea>
+
+      <button type="submit">Submit Review</button>
+    </form>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 Ugene Ampofo Ofori-Atta. All rights reserved.
+</footer>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  const stripe = Stripe('pk_test_XXXXXXXXXXXXXXXXXXXX'); // Replace with your Stripe publishable key
+  const PRICE_ID = 'price_XXXXXXXXXXXXXXXXXXXX'; // Replace with your real Stripe price ID
+
+  // Cart logic
+  const cartCountEl = document.getElementById('cart-count');
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+  function setCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+  function updateCartCount() {
+    const cart = getCart();
+    const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountEl.textContent = totalQty;
+  }
+
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    let cart = getCart();
+    const index = cart.findIndex(item => item.priceId === PRICE_ID);
+    if (index > -1) {
+      cart[index].quantity += 1;
+    } else {
+      cart.push({ priceId: PRICE_ID, name: 'Your Book Title', quantity: 1, price: 19.99 });
+    }
+    setCart(cart);
+    updateCartCount();
+    alert('Book added to cart!');
+  });
+
+  document.getElementById('buyBtn').addEventListener('click', async () => {
+    try {
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: [{ price: PRICE_ID, quantity: 1 }],
+        mode: 'payment',
+        successUrl: window.location.origin + '/success.html',
+        cancelUrl: window.location.href,
+      });
+      if (error) {
+        alert(error.message);
+      }
+    } catch (err) {
+      alert('Checkout failed: ' + err.message);
+    }
+  });
+
+  updateCartCount();
+
+  // Review logic
+  const reviewList = document.getElementById('reviewList');
+  const reviewForm = document.getElementById('reviewForm');
+
+  function loadReviews() {
+    const reviews = JSON.parse(localStorage.getItem('bookReviews') || '[]');
+    reviewList.innerHTML = '';
+    if (reviews.length === 0) {
+      reviewList.innerHTML = '<li>No reviews yet. Be the first to review!</li>';
+      return;
+    }
+    reviews.forEach(({name, rating, comment}) => {
+      const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div class="reviewer">${name}</div>
+        <div class="rating">${stars}</div>
+        <div class="comment">${comment}</div>
+      `;
+      reviewList.appendChild(li);
+    });
+  }
+
+  reviewForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = reviewForm.reviewerName.value.trim();
+    const rating = parseInt(reviewForm.rating.value);
+    const comment = reviewForm.comment.value.trim();
+    if (!name || !rating || !comment) return;
+    const reviews = JSON.parse(localStorage.getItem('bookReviews') || '[]');
+    reviews.push({ name, rating, comment });
+    localStorage.setItem('bookReviews', JSON.stringify(reviews));
+    reviewForm.reset();
+    loadReviews();
+  });
+
+  loadReviews();
+</script>
+
+</body>
+</html>
